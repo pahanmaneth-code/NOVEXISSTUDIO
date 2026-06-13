@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thisari & Roshan | The Wedding</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Join us in celebrating the wedding of Thisari Nethmini & Roshan Devinda. Saturday, 12th December 2026.">
+    <meta property="og:title" content="Thisari & Roshan | The Wedding">
+    <meta property="og:description" content="Join us in celebrating our wedding. Saturday, 12th December 2026 in Colombo.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* --- DESIGN SYSTEM & VARIABLES --- */
+        :root {
+            --wedding-cream: #fbf9f4;
+            --wedding-paper: #f4ede0;
+            --wedding-blush: #f8e5e2;
+            --wedding-sage: #9bb0a5;
+            --wedding-olive: #2a3a2e;
+            --wedding-gold: #bca06a;
+            --wedding-accent: #bca06a;
+            --wedding-text: #26211d;
+            --wedding-text-muted: #5e554e;
+            
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --font-script: 'Great Vibes', cursive;
+            --font-outfit: 'Outfit', sans-serif;
+            
+            /* Envelope greeting position: 0.35 to place above the seal, 0.82 to place under the seal */
+            --envelope-y: 0.35;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--wedding-cream);
+            color: var(--wedding-text);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        body.locked {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+        }
+
+        /* --- TYPOGRAPHY UTILITIES --- */
+        .font-serif { font-family: var(--font-serif); }
+        .font-sans { font-family: var(--font-sans); }
+        .font-script { font-family: var(--font-script); }
+
+        /* --- ENVELOPE STYLES --- */
+        .envelope-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #2a1b1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px;
+            cursor: pointer;
+            z-index: 99999;
+            /* Update: Ensure smooth fade out of the wrapper itself */
+            will-change: opacity, transform;
+        }
+
+        .envelope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+        }
+
+        .envelope-base,
+        .envelope-lid,
+        .envelope-lid-shadow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+
+        .envelope-base {
+            z-index: 1;
+            transform: translateZ(-2px); 
+        }
+
+        .lid-shadow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            transform-origin: 50% 0%;
+            transform-style: preserve-3d;
+            transform: translateZ(-1px);
+            pointer-events: none;
+        }
+
+        .envelope-lid-shadow {
+            pointer-events: none;
+            mix-blend-mode: multiply;
+            opacity: 0.12;
+            filter: brightness(0) blur(2px);
+            transform-origin: 50% 0%;
+            transform: translateY(0px) scaleY(1);
+            transition: transform 6s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 6s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .lid-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            transform-origin: 50% 0%;
+            transform-style: preserve-3d;
+            transform: translateZ(2px);
+            transition: transform 6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-lid {
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .envelope-wrapper.open .lid-container {
+            transform: translateZ(8px) rotateX(15deg); 
+        }
+
+        .envelope-wrapper.open .envelope-lid-shadow {
+            opacity: 0.38;
+            filter: brightness(0) blur(18px);
+            transform: translateY(16px) scaleY(1.03);
+        }
+
+        /* --- ENVELOPE GREETING TEXT --- */
+        .envelope-greeting {
+            position: absolute;
+            left: 50%;
+            /* Calculate top position relative to image aspect ratio */
+            top: calc(100vh * var(--envelope-y, 0.35));
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            color: #d1b580; /* Soft gold to match seal */
+            pointer-events: none;
+            transition: opacity 1.5s ease 0.5s, transform 1.5s ease 0.5s;
+            width: 90%;
+        }
+
+        @media (min-aspect-ratio: 3/2) {
+            .envelope-greeting {
+                top: calc((100vw / 1.5) * var(--envelope-y, 0.35));
+            }
+        }
+
+        .envelope-names {
+            font-family: var(--font-script);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+            color: #e6d3a8;
+        }
+
+        .envelope-tagline {
+            font-family: var(--font-serif);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .envelope-wrapper.open .envelope-greeting {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% - 20px));
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 60px;
+            color: #999;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-family: var(--font-outfit);
+            font-weight: 400;
+            z-index: 10;
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        color 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        letter-spacing 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-wrapper:hover .hint-text {
+            color: #ccc;
+            letter-spacing: 6px;
+            transform: translateY(-2px);
+        }
+
+        .envelope-wrapper.open .hint-text {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+
+        /* --- MAIN HEADER / NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.5s ease, backdrop-filter 0.5s ease;
+        }
+
+        header.scrolled {
+            background-color: rgba(250, 245, 235, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+        }
+
+        .header-logo {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header.scrolled .header-logo {
+            color: var(--wedding-text);
+            text-shadow: none;
+        }
+
+        .nav-trigger {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-trigger span {
+            display: block;
+            width: 25px;
+            height: 1.5px;
+            background-color: #fff;
+            transition: all 0.3s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        header.scrolled .nav-trigger span {
+            background-color: var(--wedding-text);
+            box-shadow: none;
+        }
+
+        .nav-trigger:hover span:first-child { transform: translateY(-2px); }
+        .nav-trigger:hover span:last-child { transform: translateY(2px); }
+
+        .nav-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: var(--wedding-olive);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .nav-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .nav-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--wedding-gold);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .nav-list {
+            list-style: none;
+            text-align: center;
+        }
+
+        .nav-list li {
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .nav-list a {
+            font-family: var(--font-serif);
+            font-size: 2.25rem;
+            color: var(--wedding-gold);
+            text-decoration: none;
+            display: block;
+            transform: translateY(100%);
+            transition: transform 0.6s, color 0.3s, letter-spacing 0.3s;
+        }
+
+        .nav-overlay.active .nav-list a {
+            transform: translateY(0);
+        }
+
+        .nav-list a:hover {
+            color: #fff;
+            letter-spacing: 3px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Slightly brighter base image, handled by gradient overlay instead */
+            filter: brightness(0.8) contrast(1.05); 
+        }
+
+        /* Gradient overlay to ensure perfect text contrast */
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            color: #fff;
+            max-width: 800px;
+        }
+
+        .hero-subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            color: var(--wedding-gold);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            text-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        }
+
+        .hero-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-divider span.line {
+            height: 1px;
+            width: 60px;
+            background-color: var(--wedding-gold);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .hero-divider span.star {
+            color: var(--wedding-gold);
+            font-size: 1.1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-date {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .hero-scroll-btn {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-scroll-btn:hover {
+            color: #fff;
+        }
+
+        .hero-scroll-btn svg {
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
+        /* --- OUR LOVE STORY SECTION --- */
+        .story-section {
+            padding: 7rem 0;
+            background-color: var(--wedding-cream);
+            position: relative;
+        }
+
+        .story-bg-card {
+            background-color: rgba(250, 244, 235, 0.76);
+            border-radius: 20px;
+            padding: 5rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-subtitle {
+            font-family: var(--font-script);
+            font-size: 2rem;
+            color: var(--wedding-gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            color: var(--wedding-olive);
+            margin-bottom: 1.5rem;
+        }
+
+        .header-decor {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .header-decor span.line {
+            height: 1px;
+            width: 80px;
+            background-color: rgba(197, 160, 89, 0.3);
+        }
+
+        .header-decor svg {
+            color: var(--wedding-gold);
+            width: 18px;
+            height: 18px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline-track {
+            position: absolute;
+            left: 16px;
+            top: 0;
+            bottom: 20px;
+            width: 1px;
+            background-color: rgba(197, 160, 89, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .timeline-track {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            padding-left: 45px;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-item {
+                flex-direction: row;
+                padding-left: 0;
+                margin-bottom: 5rem;
+            }
+            .timeline-item:nth-child(even) {
+                flex-direction: row-reverse;
+            }
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-content {
+                width: 45%;
+                padding-right: 3rem;
+                text-align: right;
+            }
+            .timeline-item:nth-child(even) .timeline-content {
+                padding-right: 0;
+                padding-left: 3rem;
+                text-align: left;
+            }
+        }
+
+        .timeline-year {
+            font-family: var(--font-script);
+            font-size: 2.25rem;
+            color: var(--wedding-gold);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .timeline-title {
+            font-family: var(--font-script);
+            font-size: 1.85rem;
+            color: var(--wedding-text);
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-desc {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--wedding-text-muted);
+            line-height: 1.7;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 16px;
+            top: 10px;
+            width: 9px;
+            height: 9px;
+            background-color: var(--wedding-gold);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            transition: transform 0.5s;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-dot {
+                left: 50%;
+            }
+        }
+
+        .timeline-space {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-space {
+                display: block;
+                flex: 1;
+                width: 45%;
+            }
+        }
+
+        .story-doves {
+            margin-top: 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .story-doves img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+
+        /* --- DAY PROGRAM SECTION --- */
+        .program-section {
+            padding: 6rem 0;
+            background-color: var(--wedding-olive);
+            color: #fff;
+        }
+
+        .program-section .section-title {
+            color: var(--wedding-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .program-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .program-container {
+            max-width: 1000px;
+            margin: 4rem auto 0 auto;
+            position: relative;
+        }
+
+        /* Desktop horizontal timeline */
+        .program-grid {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .program-grid {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 1rem;
+                position: relative;
+            }
+
+            .program-line {
+                position: absolute;
+                top: 70px;
+                left: 10%;
+                right: 10%;
+                height: 1px;
+                background-color: rgba(255, 255, 255, 0.2);
+                z-index: 1;
+            }
+
+            .program-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                position: relative;
+                z-index: 2;
+                transition: transform 0.3s;
+            }
+
+            .program-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .program-time {
+                background-color: var(--wedding-gold);
+                color: var(--wedding-olive);
+                padding: 0.35rem 0.85rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+                margin-bottom: 1.25rem;
+                transition: background-color 0.3s;
+            }
+
+            .program-card:hover .program-time {
+                background-color: var(--wedding-cream);
+            }
+
+            .program-icon-wrap {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: var(--wedding-olive);
+                border: 2px solid rgba(255,255,255,0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--wedding-gold);
+                margin-bottom: 1.25rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+                transition: border-color 0.3s, transform 0.3s;
+            }
+
+            .program-card:hover .program-icon-wrap {
+                border-color: var(--wedding-gold);
+                transform: scale(1.1);
+            }
+
+            .program-card h3 {
+                font-family: var(--font-serif);
+                font-size: 1.15rem;
+                color: #fff;
+                margin-bottom: 0.5rem;
+            }
+
+            .program-card p {
+                font-size: 0.75rem;
+                color: rgba(255, 255, 255, 0.6);
+                line-height: 1.5;
+                padding: 0 0.5rem;
+            }
+        }
+
+        /* Mobile vertical timeline */
+        .program-list-mobile {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+
+        .program-list-mobile::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .program-mobile-item {
+            position: relative;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .program-mobile-icon {
+            position: absolute;
+            left: -32px;
+            top: 2px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--wedding-olive);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--wedding-gold);
+            z-index: 5;
+        }
+
+        .program-mobile-content {
+            flex: 1;
+        }
+
+        .program-mobile-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 0.25rem;
+        }
+
+        .program-mobile-time {
+            background-color: var(--wedding-gold);
+            color: var(--wedding-olive);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .program-mobile-content h3 {
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .program-mobile-content p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        @media (min-width: 768px) {
+            .program-list-mobile {
+                display: none;
+            }
+        }
+
+        /* --- GIFTS SECTION --- */
+        .gifts-section {
+            padding: 6rem 0;
+            background-color: #faf5eb;
+            text-align: center;
+        }
+
+        .gifts-desc {
+            color: var(--wedding-text-muted);
+            max-width: 500px;
+            margin: 0 auto 3rem auto;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .gifts-card {
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 12px;
+            border: 2px solid var(--wedding-olive);
+            background-color: var(--wedding-olive);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .gifts-header-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            color: #fff;
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+        }
+
+        .gifts-chevron {
+            transition: transform 0.3s;
+        }
+
+        .gifts-card.open .gifts-chevron {
+            transform: rotate(180deg);
+        }
+
+        .gifts-expand-body {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            background-color: #fff;
+            border-top: 1px solid #e2ded5;
+        }
+
+        .gifts-card.open .gifts-expand-body {
+            max-height: 350px;
+            opacity: 1;
+        }
+
+        .gifts-content-inner {
+            padding: 2rem;
+            text-align: left;
+            color: var(--wedding-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .gifts-content-inner p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .bank-details-box {
+            background-color: var(--wedding-cream);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .bank-details-box p {
+            margin-bottom: 0.5rem;
+        }
+
+        .bank-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            border-bottom: 1px dotted rgba(0,0,0,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .bank-detail-row:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .bank-label {
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            color: var(--wedding-olive);
+        }
+
+        .bank-value {
+            font-family: var(--font-serif);
+            font-size: 0.95rem;
+            color: var(--wedding-text);
+        }
+
+        /* --- EVENT DETAILS SECTION --- */
+        .details-section {
+            padding: 7rem 0;
+            background-color: #fff;
+        }
+
+        .details-section .section-title {
+            color: var(--wedding-olive);
+        }
+
+        .details-desc {
+            color: var(--wedding-text-muted);
+            text-align: center;
+            max-width: 600px;
+            margin: -3.5rem auto 4rem auto;
+            font-size: 0.95rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 992px) {
+            .details-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .details-card {
+            background-color: var(--wedding-cream);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.02);
+            transition: box-shadow 0.3s;
+        }
+
+        .details-card:hover {
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        }
+
+        .details-icon-wrap {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(197, 160, 89, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--wedding-gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .details-card h3 {
+            font-size: 1.6rem;
+            color: var(--wedding-text);
+            margin-bottom: 1.25rem;
+        }
+
+        .details-info-list {
+            margin-bottom: 2rem;
+        }
+
+        .details-info-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 0.75rem;
+            color: var(--wedding-text-muted);
+            font-size: 0.95rem;
+        }
+
+        .details-info-item svg {
+            color: var(--wedding-gold);
+            flex-shrink: 0;
+        }
+
+        .details-address {
+            font-size: 0.8rem;
+            color: var(--wedding-text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .details-map-container {
+            width: 100%;
+            height: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .details-card p.description {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--wedding-text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .details-btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        @media (min-width: 576px) {
+            .details-btn-group {
+                flex-direction: row;
+            }
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.65rem 1.5rem;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 6px;
+            background: none;
+            color: var(--wedding-gold);
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(197, 160, 89, 0.1);
+        }
+
+        /* Dress code block */
+        .dress-code-card {
+            background-color: var(--wedding-olive);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            color: #fff;
+            margin-top: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dress-code-card h3 {
+            color: var(--wedding-gold);
+            font-size: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dress-code-subtitle {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            font-family: var(--font-serif);
+        }
+
+        .dress-code-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .dress-code-image {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        /* --- FOUNTAIN DIVIDER --- */
+        .fountain-divider {
+            background-color: var(--wedding-cream);
+            padding: 3rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fountain-divider img {
+            width: 100%;
+            max-width: 380px;
+            height: auto;
+        }
+
+        /* --- COUNTDOWN SECTION --- */
+        .countdown-section {
+            padding: 6rem 0;
+            background-color: var(--wedding-olive);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(188, 160, 106, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .countdown-wrapper-box {
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .countdown-subtitle {
+            font-family: var(--font-script);
+            font-size: 2rem;
+            color: var(--wedding-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 3rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .countdown-card-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+
+        .countdown-card-item span:first-child {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            font-weight: 300;
+            color: #fff;
+            line-height: 1;
+            position: relative;
+        }
+
+        .countdown-card-item span.label {
+            font-family: var(--font-sans);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--wedding-gold);
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 576px) {
+            .countdown-grid {
+                gap: 1rem;
+            }
+            .countdown-card-item {
+                min-width: 70px;
+            }
+            .countdown-card-item span:first-child {
+                font-size: 2.75rem;
+            }
+            .countdown-card-item span.label {
+                font-size: 0.6rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* --- RSVP SECTION --- */
+        .rsvp-section {
+            padding: 7rem 0;
+            background-color: var(--wedding-cream);
+            position: relative;
+        }
+
+        .rsvp-section .section-title {
+            color: var(--wedding-olive);
+        }
+
+        .rsvp-deadline {
+            text-align: center;
+            color: var(--wedding-text-muted);
+            margin: -3.5rem auto 3rem auto;
+            font-size: 0.95rem;
+        }
+
+        .rsvp-card {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            position: relative;
+        }
+
+        @media (max-width: 576px) {
+            .rsvp-card {
+                padding: 1.5rem;
+            }
+        }
+
+        .rsvp-form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .rsvp-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--wedding-text);
+        }
+
+        .rsvp-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(53, 69, 49, 0.2);
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .rsvp-input:focus {
+            border-color: var(--wedding-accent);
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+        }
+
+        .rsvp-radio-group {
+            display: flex;
+            gap: 2rem;
+            margin-top: 0.25rem;
+        }
+
+        .rsvp-radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .rsvp-radio-option input {
+            cursor: pointer;
+            accent-color: var(--wedding-accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        .rsvp-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c5a059' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        .rsvp-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Companion block styling */
+        .companions-box {
+            background-color: rgba(179, 194, 176, 0.1);
+            border: 1px solid rgba(179, 194, 176, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .companions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .companions-header h4 {
+            font-size: 1.1rem;
+            color: var(--wedding-olive);
+        }
+
+        .companions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .companion-item {
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .companion-remove-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: #d9534f;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: var(--wedding-olive);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 1rem 2rem;
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #273324;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary:disabled {
+            background-color: #8c9889;
+            cursor: not-allowed;
+        }
+
+        /* Success screen */
+        .rsvp-success-view {
+            display: none;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .rsvp-success-view h3 {
+            font-size: 2.25rem;
+            color: var(--wedding-olive);
+            margin-bottom: 1rem;
+        }
+
+        .rsvp-success-view p {
+            color: var(--wedding-text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        /* --- TRAVEL & ACCOMMODATION SECTION --- */
+        .travel-section {
+            padding: 7rem 0;
+            background-color: var(--wedding-cream);
+        }
+
+        .travel-section .section-title {
+            color: var(--wedding-olive);
+        }
+
+        .travel-section .section-subtitle {
+            color: var(--wedding-gold);
+        }
+
+        .travel-group-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+            color: var(--wedding-olive);
+        }
+
+        .travel-group-title h3 {
+            font-size: 1.75rem;
+        }
+
+        .travel-group-title svg {
+            color: var(--wedding-gold);
+        }
+
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        @media (min-width: 768px) {
+            .hotels-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .hotel-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        .hotel-card h4 {
+            font-size: 1.35rem;
+            color: var(--wedding-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-rating {
+            color: var(--wedding-gold);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-distance {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--wedding-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .hotel-distance svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .hotel-note {
+            font-size: 0.85rem;
+            color: var(--wedding-text-muted);
+        }
+
+        /* Things to do */
+        .attractions-box {
+            background-color: var(--wedding-olive);
+            border-radius: 16px;
+            padding: 3rem;
+            color: #fff;
+            margin-bottom: 5rem;
+        }
+
+        .attractions-box h3 {
+            font-size: 1.75rem;
+            color: var(--wedding-gold);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .attractions-box p {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .attractions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .attractions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .attraction-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .attraction-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--wedding-gold);
+            border-radius: 50%;
+        }
+
+        /* Questions box */
+        .questions-box {
+            background-color: rgba(197, 160, 89, 0.15);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .questions-box h3 {
+            font-size: 1.6rem;
+            color: var(--wedding-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .questions-box p {
+            color: var(--wedding-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .questions-contacts {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 576px) {
+            .questions-contacts {
+                flex-direction: row;
+                gap: 3rem;
+            }
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--wedding-gold);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .contact-link:hover {
+            color: var(--wedding-olive);
+        }
+
+        /* --- PLAYING FLOATING CONTROLLER --- */
+        .music-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(97, 90, 85, 0.3);
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--wedding-text-muted);
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .music-toggle:hover {
+            color: var(--wedding-text);
+            border-color: var(--wedding-text);
+        }
+
+        /* --- ANIMATIONS & KEYFRAMES --- */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0.5; }
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .animate-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="locked">
+
+    <!-- background audio file -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Background Music For Wedding Videos - Romantic Piano Instrumental - Vens Adams.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 3D ENVELOPE OPENING -->
+    <section class="envelope-wrapper" onclick="toggleEnvelope()">
+        <div class="envelope-greeting">
+            <p class="envelope-tagline" style="margin-bottom: 0.5rem;">The Wedding Of</p>
+            <h2 class="envelope-names">Thisari & Roshan</h2>
+        </div>
+
+        <div class="envelope-container">
+            <img src="envelope-base.jpg" alt="Envelope Base" class="envelope-base">
+            <div class="lid-shadow-container">
+                <img src="envelope-lid-aligned.png" alt="Envelope Lid Shadow" class="envelope-lid-shadow">
+            </div>
+            <div class="lid-container">
+                <img src="envelope-lid-aligned.png" alt="Envelope Lid" class="envelope-lid">
+            </div>
+        </div>
+        <div class="hint-text">Click to view</div>
+    </section>
+
+    <!-- MAIN SITE CONTENT -->
+    <div id="main-site" style="display: none; opacity: 0;">
+        
+        <!-- Header -->
+        <header id="mainHeader">
+            <a href="#" class="header-logo">T & R</a>
+            <button class="nav-trigger" id="navToggle" aria-label="Open navigation menu">
+                <span></span>
+                <span style="margin-top: 4px; width: 18px; align-self: flex-end;"></span>
+            </button>
+        </header>
+
+        <!-- Nav Overlay Menu -->
+        <div class="nav-overlay" id="navOverlay">
+            <button class="nav-close" id="navClose">CLOSE</button>
+            <ul class="nav-list">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#story">Our Story</a></li>
+                <li><a href="#program">Program</a></li>
+                <li><a href="#gifts">Gifts</a></li>
+                <li><a href="#details">Details</a></li>
+                <li><a href="#rsvp">RSVP</a></li>
+                <li><a href="#travel">Travel</a></li>
+            </ul>
+        </div>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero" id="home">
+                <div class="hero-bg">
+                    <img src="kingsbury_venue.png" alt="Kingsbury Venue Watercolor Illustration">
+                </div>
+                <div class="hero-content">
+                    <p class="hero-subtitle">We're Getting Married</p>
+                    <h1 class="hero-title">Thisari <span class="font-script" style="color: var(--wedding-gold); text-transform: none;">&</span> Roshan</h1>
+                    <div class="hero-divider">
+                        <span class="line"></span>
+                        <span class="star">✦</span>
+                        <span class="line"></span>
+                    </div>
+                    
+                </div>
+            </section>
+
+            <!-- Our Story Section -->
+            <section class="story-section animate-fade-in" id="story">
+                <div class="container">
+                    <div class="story-bg-card">
+                        
+                        <div class="section-header animate-fade-in">
+                            <p class="section-subtitle">Our Journey</p>
+                            <h2 class="section-title">Our Love Story</h2>
+                            <div class="header-decor">
+                                <span class="line"></span>
+                                <i data-lucide="heart"></i>
+                                <span class="line"></span>
+                            </div>
+                        </div>
+
+                        <div class="timeline">
+                            <div class="timeline-track"></div>
+                            
+                            <!-- Milestone 1 -->
+                            <div class="timeline-item animate-fade-in">
+                                <div class="timeline-content">
+                                    <span class="timeline-year">2020</span>
+                                    <h3 class="timeline-title">How We Met</h3>
+                                    <p class="timeline-desc">Our paths crossed in the most unexpected way. What started as a chance encounter became the beginning of our beautiful journey together.</p>
+                                </div>
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-space"></div>
+                            </div>
+
+                            <!-- Milestone 2 -->
+                            <div class="timeline-item animate-fade-in">
+                                <div class="timeline-content">
+                                    <span class="timeline-year">2022</span>
+                                    <h3 class="timeline-title">First Adventure</h3>
+                                    <p class="timeline-desc">We discovered our shared love for exploration and adventure. From late-night conversations to spontaneous trips, every moment brought us closer.</p>
+                                </div>
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-space"></div>
+                            </div>
+
+                            <!-- Milestone 3 -->
+                            <div class="timeline-item animate-fade-in">
+                                <div class="timeline-content">
+                                    <span class="timeline-year">2024</span>
+                                    <h3 class="timeline-title">Moving Forward</h3>
+                                    <p class="timeline-desc">We knew this was forever. Building our life together, supporting each other's dreams, and growing stronger with each passing day.</p>
+                                </div>
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-space"></div>
+                            </div>
+
+                            <!-- Milestone 4 -->
+                            <div class="timeline-item animate-fade-in">
+                                <div class="timeline-content">
+                                    <span class="timeline-year">2026</span>
+                                    <h3 class="timeline-title">The Proposal</h3>
+                                    <p class="timeline-desc">With a heart full of love and dreams for our future, the question was asked and answered with tears of joy.</p>
+                                </div>
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-space"></div>
+                            </div>
+                        </div>
+
+                        <div class="story-doves animate-fade-in">
+                            <img src="wedding_doves.png" alt="Wedding Couple Illustration">
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Day Program Section -->
+            <section class="program-section animate-fade-in" id="program">
+                <div class="container">
+                    
+                    <div class="section-header animate-fade-in">
+                        <h2 class="section-title">Day Program</h2>
+                        <p class="section-subtitle">What we have prepared for you</p>
+                    </div>
+
+                    <div class="program-container">
+                        
+                        <!-- Desktop View (Horizontal) -->
+                        <div class="program-line"></div>
+                        <div class="program-grid">
+                            
+                            <!-- Card 1 -->
+                            <div class="program-card animate-fade-in" style="transition-delay: 0.1s;">
+                                <span class="program-time">08:30 AM</span>
+                                <div class="program-icon-wrap">
+                                    <i data-lucide="music-4"></i>
+                                </div>
+                                <h3>Guest Arrival</h3>
+                                <p>Arrival of guests accompanied by traditional Magul Bera drummers.</p>
+                            </div>
+
+                            <!-- Card 2 -->
+                            <div class="program-card animate-fade-in" style="transition-delay: 0.2s;">
+                                <span class="program-time">09:15 AM</span>
+                                <div class="program-icon-wrap">
+                                    <i data-lucide="sparkles"></i>
+                                </div>
+                                <h3>Poruwa Ceremony</h3>
+                                <p>Traditional customs and assembly on the beautifully adorned Poruwa.</p>
+                            </div>
+
+                            <!-- Card 3 -->
+                            <div class="program-card animate-fade-in" style="transition-delay: 0.3s;">
+                                <span class="program-time">10:30 AM</span>
+                                <div class="program-icon-wrap">
+                                    <i data-lucide="cake"></i>
+                                </div>
+                                <h3>Toast & Cake</h3>
+                                <p>Celebrating with champagne toast and traditional milk rice cutting.</p>
+                            </div>
+
+                            <!-- Card 4 -->
+                            <div class="program-card animate-fade-in" style="transition-delay: 0.4s;">
+                                <span class="program-time">11:30 AM</span>
+                                <div class="program-icon-wrap">
+                                    <i data-lucide="utensils"></i>
+                                </div>
+                                <h3>Buffet Lunch</h3>
+                                <p>A premium culinary spread prepared for our family and friends.</p>
+                            </div>
+
+                            <!-- Card 5 -->
+                            <div class="program-card animate-fade-in" style="transition-delay: 0.5s;">
+                                <span class="program-time">02:00 PM</span>
+                                <div class="program-icon-wrap">
+                                    <i data-lucide="heart"></i>
+                                </div>
+                                <h3>Farewell</h3>
+                                <p>Sending off the couple with warmest wishes and departure blessings.</p>
+                            </div>
+
+                        </div>
+
+                        <!-- Mobile View (Vertical) -->
+                        <div class="program-list-mobile">
+                            
+                            <!-- Item 1 -->
+                            <div class="program-mobile-item">
+                                <div class="program-mobile-icon"><i data-lucide="music-4" style="width: 14px; height: 14px;"></i></div>
+                                <div class="program-mobile-content">
+                                    <div class="program-mobile-header">
+                                        <span class="program-mobile-time">08:30 AM</span>
+                                        <h3>Guest Arrival</h3>
+                                    </div>
+                                    <p>Arrival of guests accompanied by traditional Magul Bera drummers.</p>
+                                </div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="program-mobile-item">
+                                <div class="program-mobile-icon"><i data-lucide="sparkles" style="width: 14px; height: 14px;"></i></div>
+                                <div class="program-mobile-content">
+                                    <div class="program-mobile-header">
+                                        <span class="program-mobile-time">09:15 AM</span>
+                                        <h3>Poruwa Ceremony</h3>
+                                    </div>
+                                    <p>Traditional customs and assembly on the beautifully adorned Poruwa.</p>
+                                </div>
+                            </div>
+
+                            <!-- Item 3 -->
+                            <div class="program-mobile-item">
+                                <div class="program-mobile-icon"><i data-lucide="cake" style="width: 14px; height: 14px;"></i></div>
+                                <div class="program-mobile-content">
+                                    <div class="program-mobile-header">
+                                        <span class="program-mobile-time">10:30 AM</span>
+                                        <h3>Toast & Cake Cutting</h3>
+                                    </div>
+                                    <p>Celebrating with champagne toast and traditional milk rice cutting.</p>
+                                </div>
+                            </div>
+
+                            <!-- Item 4 -->
+                            <div class="program-mobile-item">
+                                <div class="program-mobile-icon"><i data-lucide="utensils" style="width: 14px; height: 14px;"></i></div>
+                                <div class="program-mobile-content">
+                                    <div class="program-mobile-header">
+                                        <span class="program-mobile-time">11:30 AM</span>
+                                        <h3>Buffet Lunch</h3>
+                                    </div>
+                                    <p>A premium culinary spread prepared for our family and friends.</p>
+                                </div>
+                            </div>
+
+                            <!-- Item 5 -->
+                            <div class="program-mobile-item">
+                                <div class="program-mobile-icon"><i data-lucide="heart" style="width: 14px; height: 14px;"></i></div>
+                                <div class="program-mobile-content">
+                                    <div class="program-mobile-header">
+                                        <span class="program-mobile-time">02:00 PM</span>
+                                        <h3>Farewell</h3>
+                                    </div>
+                                    <p>Sending off the couple with warmest wishes and departure blessings.</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Gifts Section -->
+            <section class="gifts-section animate-fade-in" id="gifts">
+                <div class="container">
+                    
+                    <div class="section-header animate-fade-in">
+                        <h2 class="section-title">Gifts</h2>
+                    </div>
+
+                    <p class="gifts-desc">Your presence is what matters most to us. If you wish to give us a gift, you can do so in the way that suits you best.</p>
+
+                    <div class="gifts-card animate-fade-in">
+                        <button class="gifts-header-btn" onclick="toggleGiftsCollapse()">
+                            <span>Bank Transfer Details</span>
+                            <i data-lucide="chevron-down" class="gifts-chevron"></i>
+                        </button>
+                        <div class="gifts-expand-body">
+                            <div class="gifts-content-inner">
+                                <p>If it suits you better, you can also make a bank transfer to our registry account:</p>
+                                <div class="bank-details-box">
+                                    <div class="bank-detail-row">
+                                        <span class="bank-label">Bank</span>
+                                        <span class="bank-value">Commercial Bank of Ceylon</span>
+                                    </div>
+                                    <div class="bank-detail-row">
+                                        <span class="bank-label">Branch</span>
+                                        <span class="bank-value">Colombo Fort Branch</span>
+                                    </div>
+                                    <div class="bank-detail-row">
+                                        <span class="bank-label">Account Name</span>
+                                        <span class="bank-value">T N Jayasekara & R D Alwis</span>
+                                    </div>
+                                    <div class="bank-detail-row">
+                                        <span class="bank-label">Account Number</span>
+                                        <span class="bank-value" style="font-family: monospace; letter-spacing: 1px;">1009-5432-10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Event Details Section -->
+            <section class="details-section animate-fade-in" id="details">
+                <div class="container">
+                    
+                    <div class="section-header animate-fade-in">
+                        <p class="section-subtitle">Join Us</p>
+                        <h2 class="section-title">Event Details</h2>
+                    </div>
+                    <p class="details-desc">We can't wait to celebrate this special day with you. Here's everything you need to know about the venues.</p>
+
+                    <div class="details-grid">
+                        
+                        <!-- Ceremony card -->
+                        <div class="details-card animate-fade-in">
+                            <div class="details-icon-wrap">
+                                <i data-lucide="heart"></i>
+                            </div>
+                            <h3>Wedding Ceremony</h3>
+                            
+                            <div class="details-info-list">
+                                <div class="details-info-item">
+                                    <i data-lucide="calendar" size="18"></i>
+                                    <span>Saturday, 12th December 2026</span>
+                                </div>
+                                <div class="details-info-item">
+                                    <i data-lucide="clock" size="18"></i>
+                                    <span>From 08:30 AM Onwards</span>
+                                </div>
+                                <div class="details-info-item">
+                                    <i data-lucide="map-pin" size="18"></i>
+                                    <span>The Balmoral Ballroom, The Kingsbury</span>
+                                </div>
+                                <p class="details-address">Janadhipathi Mawatha, Colombo 01, Sri Lanka</p>
+                            </div>
+
+                            <div class="details-map-container">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.6729215002065!2d79.84156687589255!3d6.929668418365287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2592305555555%3A0xc07cf1cbe18cb3f9!2sThe%20Kingsbury%20Colombo!5e0!3m2!1sen!2slk!4v1700000000000!5m2!1sen!2slk" 
+                                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="The Kingsbury Colombo map">
+                                </iframe>
+                            </div>
+
+                            <p class="description">We request the honor of your presence to share in our joy as we pledge our vows on Poruwa and celebrate our wedding reception.</p>
+                            
+                            <div class="details-btn-group">
+                                <a href="https://maps.app.goo.gl/3XpXG6k9vYn9w6w47" target="_blank" class="btn-outline">
+                                    <i data-lucide="map" size="16"></i>
+                                    <span>Open in Maps</span>
+                                </a>
+                                <button onclick="downloadCalendarInvite('Ceremony')" class="btn-outline">
+                                    <i data-lucide="calendar-plus" size="16"></i>
+                                    <span>Add to Calendar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Homecoming card -->
+                        <div class="details-card animate-fade-in">
+                            <div class="details-icon-wrap">
+                                <i data-lucide="home"></i>
+                            </div>
+                            <h3>Homecoming Celebration</h3>
+                            
+                            <div class="details-info-list">
+                                <div class="details-info-item">
+                                    <i data-lucide="calendar" size="18"></i>
+                                    <span>Wednesday, 16th December 2026</span>
+                                </div>
+                                <div class="details-info-item">
+                                    <i data-lucide="clock" size="18"></i>
+                                    <span>From 06:30 PM Onwards</span>
+                                </div>
+                                <div class="details-info-item">
+                                    <i data-lucide="map-pin" size="18"></i>
+                                    <span>Jetwing Blue, Negombo</span>
+                                </div>
+                                <p class="details-address">Ethukala, Negombo, Sri Lanka</p>
+                            </div>
+
+                            <div class="details-map-container">
+                                <iframe 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.912534574922!2d79.83984367590059!3d7.250800814674758!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2c943b5555555%3A0x8cf2f01fbe355a1!2sJetwing%20Blue!5e0!3m2!1sen!2slk!4v1700000000001!5m2!1sen!2slk" 
+                                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Jetwing Blue Negombo map">
+                                </iframe>
+                            </div>
+
+                            <p class="description">We look forward to welcoming you to our homecoming celebration for a magical evening of dinner and dance by the beachfront.</p>
+                            
+                            <div class="details-btn-group">
+                                <a href="https://maps.app.goo.gl/gQcshG6FjFjS4eWw5" target="_blank" class="btn-outline">
+                                    <i data-lucide="map" size="16"></i>
+                                    <span>Open in Maps</span>
+                                </a>
+                                <button onclick="downloadCalendarInvite('Homecoming')" class="btn-outline">
+                                    <i data-lucide="calendar-plus" size="16"></i>
+                                    <span>Add to Calendar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Dress Code Card -->
+                    <div class="dress-code-card animate-fade-in">
+                        <i data-lucide="shirt" style="color: var(--wedding-gold); width: 36px; height: 36px; margin-bottom: 1.5rem;"></i>
+                        <h3>The Wedding Dress Code</h3>
+                        <p class="dress-code-subtitle">Traditional Kandyan / Formal Wear</p>
+                        <p class="dress-code-desc">To help create an elegant atmosphere that coordinates beautifully with our memories, we kindly invite our guests to arrive wearing outfits reflecting our theme color palette: shades of Pastel Blue and Rose Gold.</p>
+                        <img src="dress_code_colors.png" alt="Pastel Blue & Rose Gold Color Guide" class="dress-code-image">
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Fountain Divider -->
+            <div class="fountain-divider animate-fade-in">
+                <img src="fountain_divider.png" alt="Decorative Fountain Illustration">
+            </div>
+
+            <!-- Relocated Countdown Timer Section -->
+            <section class="countdown-section animate-fade-in" id="countdown-sec">
+                <div class="container">
+                    <div class="countdown-wrapper-box">
+                        <p class="countdown-subtitle">Counting Down</p>
+                        <h2 class="countdown-title">To Our Big Day</h2>
+                        <div class="countdown-grid">
+                            <div class="countdown-card-item">
+                                <span id="c-days">00</span>
+                                <span class="label">Days</span>
+                            </div>
+                            <div class="countdown-card-item">
+                                <span id="c-hours">00</span>
+                                <span class="label">Hours</span>
+                            </div>
+                            <div class="countdown-card-item">
+                                <span id="c-mins">00</span>
+                                <span class="label">Minutes</span>
+                            </div>
+                            <div class="countdown-card-item">
+                                <span id="c-secs">00</span>
+                                <span class="label">Seconds</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RSVP Section -->
+            <section class="rsvp-section animate-fade-in" id="rsvp">
+                <div class="container">
+                    
+                    <div class="section-header animate-fade-in">
+                        <p class="section-subtitle">Be Our Guest</p>
+                        <h2 class="section-title">RSVP</h2>
+                    </div>
+                    <p class="rsvp-deadline">Kindly respond before November 15th, 2026.</p>
+
+                    <div class="rsvp-card animate-fade-in">
+                        
+                        <!-- Form View -->
+                        <form id="weddingRsvpForm" onsubmit="handleFormSubmit(event)">
+                            <input type="hidden" name="wedding_hashtag" value="#RoshanFoundHisThisa">
+                            
+                            <!-- Name -->
+                            <div class="rsvp-form-group">
+                                <label for="form-name" class="rsvp-label">Your Full Name *</label>
+                                <input type="text" id="form-name" name="name" required placeholder="Enter your full name" class="rsvp-input">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="rsvp-form-group">
+                                <label for="form-email" class="rsvp-label">Email Address *</label>
+                                <input type="email" id="form-email" name="email" required placeholder="Enter your email address" class="rsvp-input">
+                            </div>
+
+                            <!-- Attendance -->
+                            <div class="rsvp-form-group">
+                                <label class="rsvp-label">Will you be attending? *</label>
+                                <div class="rsvp-radio-group">
+                                    <label class="rsvp-radio-option">
+                                        <input type="radio" name="attending" value="yes" required onchange="toggleFormAttendance(this.value)">
+                                        <span>Joyfully Accept</span>
+                                    </label>
+                                    <label class="rsvp-radio-option">
+                                        <input type="radio" name="attending" value="no" required onchange="toggleFormAttendance(this.value)">
+                                        <span>Regretfully Decline</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Conditional Fields (Only if attending=yes) -->
+                            <div id="attending-details" style="display: none; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 1.5rem; margin-top: 1.5rem;">
+                                
+                                <!-- Number of attendees -->
+                                <div class="rsvp-form-group">
+                                    <label for="form-guests" class="rsvp-label">Number of Attendees *</label>
+                                    <select id="form-guests" name="guests" class="rsvp-input rsvp-select" onchange="adjustCompanionCount(this.value)">
+                                        <option value="1" selected>1 Person</option>
+                                        <option value="2">2 Persons</option>
+                                    </select>
+                                </div>
+
+                                <!-- Meal choice -->
+                                <div class="rsvp-form-group">
+                                    <label for="form-meal" class="rsvp-label">Your Meal Choice *</label>
+                                    <select id="form-meal" name="primaryMeal" class="rsvp-input rsvp-select">
+                                        <option value="" disabled selected hidden>Select a meal</option>
+                                        <option value="meat">Meat Option</option>
+                                        <option value="fish">Fish Option</option>
+                                        <option value="vegetarian">Vegetarian Option</option>
+                                    </select>
+                                </div>
+
+                                <!-- Dietary restrictions -->
+                                <div class="rsvp-form-group">
+                                    <label for="form-dietary" class="rsvp-label">Allergies / Dietary Restrictions (Optional)</label>
+                                    <input type="text" id="form-dietary" name="primaryDietary" placeholder="e.g. gluten-free, nut allergy..." class="rsvp-input">
+                                </div>
+
+                                <!-- Companions dynamic box (Only shown if guests = 2) -->
+                                <div id="companions-box" class="companions-box" style="display: none;">
+                                    <div class="companions-header">
+                                        <h4>Companion Details</h4>
+                                    </div>
+                                    <div class="companions-list">
+                                        <div class="companion-item">
+                                            <div class="rsvp-form-group">
+                                                <label class="rsvp-label">Companion Full Name *</label>
+                                                <input type="text" name="companion_name" placeholder="Companion's full name" class="rsvp-input companion-field">
+                                            </div>
+                                            <div class="rsvp-form-group">
+                                                <label class="rsvp-label">Companion Meal Choice *</label>
+                                                <select name="companion_meal" class="rsvp-input rsvp-select companion-field">
+                                                    <option value="" disabled selected hidden>Select a meal</option>
+                                                    <option value="meat">Meat Option</option>
+                                                    <option value="fish">Fish Option</option>
+                                                    <option value="vegetarian">Vegetarian Option</option>
+                                                </select>
+                                            </div>
+                                            <div class="rsvp-form-group">
+                                                <label class="rsvp-label">Companion Allergies (Optional)</label>
+                                                <input type="text" name="companion_dietary" placeholder="e.g. lactose-free..." class="rsvp-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Blessings / Wishes -->
+                            <div class="rsvp-form-group" style="margin-top: 1.5rem;">
+                                <label for="form-wishes" class="rsvp-label">Blessings & Special Notes</label>
+                                <textarea id="form-wishes" name="wishes" placeholder="Share your well wishes with us..." class="rsvp-input rsvp-textarea"></textarea>
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="btn-primary">
+                                <i data-lucide="send" size="18"></i>
+                                <span>Submit RSVP</span>
+                            </button>
+
+                        </form>
+
+                        <!-- Success View -->
+                        <div id="rsvpSuccessView" class="rsvp-success-view">
+                            <i data-lucide="check-circle" style="color: var(--wedding-gold); width: 64px; height: 64px; margin-bottom: 1.5rem; display: inline-block;"></i>
+                            <h3 id="successTitle">Thank You!</h3>
+                            <p id="successMessage">We have received your response. We look forward to celebrating this beautiful day with you!</p>
+                            <p class="font-script" style="font-size: 2.25rem; color: var(--wedding-gold); margin-top: 1.5rem;">Thisari & Roshan</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Travel Section -->
+            <section class="travel-section animate-fade-in" id="travel">
+                <div class="container">
+                    
+                    <div class="section-header animate-fade-in">
+                        <p class="section-subtitle">Plan Your Visit</p>
+                        <h2 class="section-title">Travel & Accommodation</h2>
+                    </div>
+
+                    <!-- Where to stay -->
+                    <div class="travel-group-title animate-fade-in">
+                        <i data-lucide="bed"></i>
+                        <h3>Where to Stay</h3>
+                    </div>
+
+                    <div class="hotels-grid animate-fade-in">
+                        <!-- Hotel 1 -->
+                        <div class="hotel-card">
+                            <h4>The Kingsbury Colombo</h4>
+                            <p class="hotel-rating">★★★★★</p>
+                            <div class="hotel-distance">
+                                <i data-lucide="map-pin"></i>
+                                <span>At the Venue (Colombo 01)</span>
+                            </div>
+                            <p class="hotel-note">Luxury city stay overlooking the ocean. Special rates are available for wedding invitation guests. Contact venue directly for booking.</p>
+                        </div>
+
+                        <!-- Hotel 2 -->
+                        <div class="hotel-card">
+                            <h4>Jetwing Blue</h4>
+                            <p class="hotel-rating">★★★★★</p>
+                            <div class="hotel-distance">
+                                <i data-lucide="map-pin"></i>
+                                <span>Homecoming Venue (Negombo)</span>
+                            </div>
+                            <p class="hotel-note">Beautiful beachfront resort in Negombo. Ideal place to stay if you are attending the homecoming ceremony.</p>
+                        </div>
+
+                        <!-- Hotel 3 -->
+                        <div class="hotel-card">
+                            <h4>Cinnamon Grand Colombo</h4>
+                            <p class="hotel-rating">★★★★★</p>
+                            <div class="hotel-distance">
+                                <i data-lucide="map-pin"></i>
+                                <span>10 Mins from Ceremony Venue</span>
+                            </div>
+                            <p class="hotel-note">Premium hotel in central Colombo, offering highly rated dining and excellent facilities for travelers.</p>
+                        </div>
+                    </div>
+
+                    <!-- Things to do -->
+                    <div class="attractions-box animate-fade-in">
+                        <h3>Things to Do in Sri Lanka</h3>
+                        <p>If you're extending your stay in Colombo and Negombo, here are some local attractions we highly recommend exploring:</p>
+                        <div class="attractions-grid">
+                            <div class="attraction-item">
+                                <span class="attraction-dot"></span>
+                                <span>Walk along the historic Galle Face Green beach promenade</span>
+                            </div>
+                            <div class="attraction-item">
+                                <span class="attraction-dot"></span>
+                                <span>Enjoy Negombo Beach and its local seafood seafood spots</span>
+                            </div>
+                            <div class="attraction-item">
+                                <span class="attraction-dot"></span>
+                                <span>Visit the Colombo National Museum and Independence Square</span>
+                            </div>
+                            <div class="attraction-item">
+                                <span class="attraction-dot"></span>
+                                <span>Explore the floating market and shopping districts in Colombo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Questions & Q/A -->
+                    <div class="questions-box animate-fade-in">
+                        <h3>Have any Questions?</h3>
+                        <p>Please feel free to reach out to us or our families if you need help with travel, hotels, or directions.</p>
+                        <div class="questions-contacts">
+                            <a href="mailto:info@roshanandthisari.com" class="contact-link">
+                                <i data-lucide="mail" size="18"></i>
+                                <span>info@roshanandthisari.com</span>
+                            </a>
+                            <a href="tel:+94771234567" class="contact-link">
+                                <i data-lucide="phone" size="18"></i>
+                                <span>+94 77 123 4567</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-names">Thisari & Roshan</div>
+                <p class="footer-date">12 . 12 . 2026</p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--wedding-gold); opacity: 0.65; font-size: 0.85rem; margin-top: 1.5rem;">
+                    <span>Made with</span>
+                    <i data-lucide="heart" size="14" style="fill: var(--wedding-gold);"></i>
+                    <span>for our special day</span>
+                </div>
+                <div class="footer-hashtag">#RoshanFoundHisThisa</div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Music Control Float Button -->
+    <button class="music-toggle" id="musicControlBtn" onclick="togglePlayMusic()" style="display: none;" aria-label="Mute background music">
+        <i data-lucide="volume-2" id="musicVolumeIcon"></i>
+    </button>
+
+    <!-- JS Logic -->
+    <script>
+        // Global variables
+        let isMusicPlaying = false;
+        const bgMusic = document.getElementById("bgMusic");
+        const musicControlBtn = document.getElementById("musicControlBtn");
+        
+        // --- 1. ENVELOPE OPENING LOGIC ---
+        function toggleEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            if (envelope.classList.contains('open')) return; // Prevent double trigger
+            
+            envelope.classList.add('open');
+            
+            // Try playing background audio immediately on user click gesture
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                updateMusicControlUI();
+            }).catch(err => {
+                console.log("Audio autoplay prevented. Awaiting direct mute-button gesture if needed.", err);
+            });
+
+            // UPDATED: Smooth fade out (No awkward upward slide)
+            gsap.to(".envelope-wrapper", {
+                opacity: 0,
+                duration: 1.5,
+                delay: 5, // Loads website at the 5 second mark
+                ease: "power2.inOut",
+                onComplete: () => {
+                    envelope.style.display = 'none';
+                    document.body.classList.remove('locked');
+
+                    const mainSite = document.getElementById('main-site');
+                    mainSite.style.display = 'block';
+                    musicControlBtn.style.display = 'flex';
+
+                    // Reveal main website content
+                    gsap.to(mainSite, {
+                        opacity: 1,
+                        duration: 1.5,
+                        ease: "power2.out",
+                        onComplete: () => {
+                            ScrollTrigger.refresh();
+                        }
+                    });
+
+                    // Hero animations entrance sequence
+                    gsap.to(".hero-subtitle", { opacity: 1, y: 0, duration: 1, delay: 0.2 });
+                    gsap.to(".hero-title", { opacity: 1, y: 0, duration: 1.2, delay: 0.4 });
+                    gsap.to(".hero-divider", { opacity: 1, y: 0, duration: 1, delay: 0.6 });
+                    gsap.to(".hero-date", { opacity: 1, y: 0, duration: 1, delay: 0.8 });
+                    gsap.to(".hero-scroll-btn", { opacity: 1, y: 0, duration: 1, delay: 1.0 });
+                }
+            });
+        }
+
+        // --- 2. MUSIC PLAYBACK ENGINE ---
+        function togglePlayMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                }).catch(err => console.log("Audio blocked:", err));
+            }
+            updateMusicControlUI();
+        }
+
+        function updateMusicControlUI() {
+            const iconWrap = document.getElementById("musicVolumeIcon");
+            if (isMusicPlaying) {
+                iconWrap.setAttribute("data-lucide", "volume-2");
+                musicControlBtn.style.borderColor = "var(--wedding-text)";
+            } else {
+                iconWrap.setAttribute("data-lucide", "volume-x");
+                musicControlBtn.style.borderColor = "rgba(97, 90, 85, 0.3)";
+            }
+            lucide.createIcons();
+        }
+
+        // --- 3. COUNTDOWN ENGINE ---
+        const targetWeddingDate = new Date("December 12, 2026 08:30:00").getTime();
+        
+        function updateCountdownClock() {
+            const now = new Date().getTime();
+            const distance = targetWeddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("c-days").innerText = "00";
+                document.getElementById("c-hours").innerText = "00";
+                document.getElementById("c-mins").innerText = "00";
+                document.getElementById("c-secs").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("c-days").innerText = String(days).padStart(2, '0');
+            document.getElementById("c-hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("c-mins").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("c-secs").innerText = String(seconds).padStart(2, '0');
+        }
+        
+        updateCountdownClock();
+        const countdownInterval = setInterval(updateCountdownClock, 1000);
+
+        // --- 4. NAVIGATION LINKS SMOOTH SCROLL ---
+        function scrollToId(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // --- 5. COLLAPSIBLE GIFT SECTION ---
+        function toggleGiftsCollapse() {
+            const card = document.querySelector(".gifts-card");
+            card.classList.toggle("open");
+        }
+
+        // --- 6. RSVP CONDITIONAL AND COMPANIONS INPUTS ---
+        function toggleFormAttendance(value) {
+            const detailsDiv = document.getElementById("attending-details");
+            const fields = document.querySelectorAll(".companion-field");
+            if (value === "yes") {
+                detailsDiv.style.display = "block";
+                document.getElementById("form-meal").required = true;
+                fields.forEach(f => f.required = (document.getElementById("form-guests").value === "2"));
+            } else {
+                detailsDiv.style.display = "none";
+                document.getElementById("form-meal").required = false;
+                fields.forEach(f => f.required = false);
+            }
+        }
+
+        function adjustCompanionCount(value) {
+            const box = document.getElementById("companions-box");
+            const fields = document.querySelectorAll(".companion-field");
+            if (value === "2") {
+                box.style.display = "block";
+                fields.forEach(f => f.required = true);
+            } else {
+                box.style.display = "none";
+                fields.forEach(f => f.required = false);
+            }
+        }
+
+        // --- 7. RSVP FORM SHEETDB POST HANDLER ---
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById("weddingRsvpForm");
+            const submitBtn = document.getElementById("submitBtn");
+            const successView = document.getElementById("rsvpSuccessView");
+            const successTitle = document.getElementById("successTitle");
+            const successMsg = document.getElementById("successMessage");
+
+            submitBtn.disabled = true;
+            submitBtn.querySelector("span").innerText = "SENDING...";
+
+            const formData = new FormData(form);
+            const attending = formData.get("attending");
+
+            // SheetDB dual API endpoints
+            const api1 = "https://sheetdb.io/api/v1/z3tdo83urqaql";
+            const api2 = "https://sheetdb.io/api/v1/9qc6llqg5m52z";
+
+            Promise.all([
+                fetch(api1, { method: 'POST', body: formData }),
+                fetch(api2, { method: 'POST', body: formData })
+            ])
+            .then(responses => {
+                form.style.display = "none";
+                successView.style.display = "block";
+                
+                if (attending === "yes") {
+                    successTitle.innerText = "See You There!";
+                    successMsg.innerText = "Your attendance response has been successfully registered. We are thrilled to celebrate our big day with you!";
+                } else {
+                    successTitle.innerText = "We'll Miss You!";
+                    successMsg.innerText = "Thank you for letting us know. We understand that you cannot make it, and your warm blessings are deeply appreciated.";
+                }
+            })
+            .catch(error => {
+                console.error("RSVP Post error:", error);
+                submitBtn.disabled = false;
+                submitBtn.querySelector("span").innerText = "ERROR - TRY AGAIN";
+            });
+        }
+
+        // --- 8. DYNAMIC CALENDAR ICS GENERATOR ---
+        function downloadCalendarInvite(eventKey) {
+            let title = "";
+            let start = "";
+            let end = "";
+            let location = "";
+            let description = "";
+
+            if (eventKey === "Ceremony") {
+                title = "Wedding Ceremony - Thisari & Roshan";
+                start = "20261212T083000";
+                end = "20261212T140000";
+                location = "The Balmoral Ballroom, The Kingsbury, Colombo 01, Sri Lanka";
+                description = "Celebrate the marriage vows on Poruwa and reception of Thisari & Roshan.";
+            } else if (eventKey === "Homecoming") {
+                title = "Homecoming Celebration - Thisari & Roshan";
+                start = "20261216T183000";
+                end = "20261216T233000";
+                location = "Jetwing Blue, Ethukala, Negombo, Sri Lanka";
+                description = "Celebrate the homecoming reception of Thisari & Roshan.";
+            }
+
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:${title}
+LOCATION:${location}
+DESCRIPTION:${description}
+END:VEVENT
+END:VCALENDAR`;
+
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `wedding_${eventKey.toLowerCase()}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        }
+
+        // --- 9. DOM INITIALIZATION ---
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initialize lucide icons
+            lucide.createIcons();
+
+            // Navigation trigger setup
+            const navToggle = document.getElementById("navToggle");
+            const navClose = document.getElementById("navClose");
+            const navOverlay = document.getElementById("navOverlay");
+            const navLinks = document.querySelectorAll(".nav-list a");
+
+            navToggle.addEventListener("click", () => navOverlay.classList.add("active"));
+            navClose.addEventListener("click", () => navOverlay.classList.remove("active"));
+            navLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    navOverlay.classList.remove("active");
+                    const targetId = link.getAttribute("href").substring(1);
+                    scrollToId(targetId);
+                });
+            });
+
+            // Scroll animations trigger
+            const animateElements = document.querySelectorAll(".animate-fade-in");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animateElements.forEach(el => observer.observe(el));
+
+            // Header background swap on scroll
+            window.addEventListener("scroll", () => {
+                const header = document.getElementById("mainHeader");
+                if (window.scrollY > 50) {
+                    header.classList.add("scrolled");
+                } else {
+                    header.classList.remove("scrolled");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

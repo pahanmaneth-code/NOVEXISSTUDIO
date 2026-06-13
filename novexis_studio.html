@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novexis Studio — Digital Wedding Experiences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#070707;--bg2:#0D0D0D;--bg3:#141414;
+  --cr:#EDE8DC;--cr6:rgba(237,232,220,.6);--cr2:rgba(237,232,220,.2);--cr1:rgba(237,232,220,.1);--cr05:rgba(237,232,220,.05);
+  --gd:#C4A882;--gd4:rgba(196,168,130,.4);--gd1:rgba(196,168,130,.12);
+  --bdr:rgba(237,232,220,.07);--bdrS:rgba(237,232,220,.15);
+  --fd:"Cormorant Garamond",serif;--fu:"Syne",sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cr);font-family:var(--fu);font-size:13px;line-height:1.6;overflow-x:hidden;cursor:none}
+#cur{position:fixed;width:7px;height:7px;background:var(--cr);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%)}
+#curR{position:fixed;width:34px;height:34px;border:1px solid var(--gd4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .35s cubic-bezier(.25,.46,.45,.94),border-color .3s}
+body::after{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.025;pointer-events:none;z-index:9000;background-size:250px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:26px 52px;display:flex;align-items:center;justify-content:space-between;transition:all .5s cubic-bezier(.25,.46,.45,.94)}
+nav.s{background:rgba(7,7,7,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:16px 52px;border-bottom:1px solid var(--bdr)}
+.nLogo{font-family:var(--fd);font-size:17px;font-weight:600;letter-spacing:.1em;color:var(--cr);text-decoration:none}
+.nLinks{display:flex;gap:34px;list-style:none}
+.nLinks a{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cr6);text-decoration:none;transition:color .3s}
+.nLinks a:hover{color:var(--cr)}
+.nCta{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bg);background:var(--cr);padding:10px 24px;text-decoration:none;transition:background .3s}
+.nCta:hover{background:var(--gd)}
+
+/* Mobile nav toggler */
+.navToggle{display:none;background:none;border:none;cursor:pointer;position:relative;width:24px;height:20px;z-index:110}
+.navToggle span{display:block;position:absolute;height:2px;width:100%;background:var(--cr);border-radius:2px;opacity:1;left:0;transform:rotate(0deg);transition:.25s ease-in-out}
+.navToggle span:nth-child(1){top:4px}
+.navToggle span:nth-child(2){top:12px}
+.navToggle.active span:nth-child(1){transform:rotate(135deg);top:8px}
+.navToggle.active span:nth-child(2){transform:rotate(-135deg);top:8px}
+
+/* ---- HERO ---- */
+#hero{position:relative;height:100vh;min-height:650px;overflow:hidden}
+.hBg{position:absolute;inset:0;z-index:0}
+.hBg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("Gemini_Generated_Image_xgrt1cxgrt1cxgrt.png") center/cover no-repeat;
+  filter:brightness(.88);
+}
+.hBg::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(7,7,7,.7) 0%,rgba(7,7,7,.15) 42%,rgba(7,7,7,.04) 64%,rgba(7,7,7,.25) 100%),linear-gradient(to top,rgba(7,7,7,.85) 0%,transparent 34%),linear-gradient(to bottom,rgba(7,7,7,.52) 0%,transparent 16%)}
+
+/* Hero — top info strip */
+.hStrip{position:absolute;top:0;left:0;right:0;z-index:2;padding:88px 52px 0;display:flex;justify-content:space-between;pointer-events:none;animation:fUp .9s .1s both}
+.hStripTxt{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(237,232,220,.28)}
+
+/* Hero — bottom text block */
+.hContent{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 52px 58px}
+.hCat{display:flex;align-items:center;gap:14px;margin-bottom:16px;animation:fUp .9s .28s both}
+.hCatLine{width:20px;height:1px;background:var(--gd);flex-shrink:0}
+.hCatTxt{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--gd)}
+
+/* Title — editorial scale */
+.hTitle{font-family:var(--fd);font-size:clamp(32px, 4.2vw, 56px);font-weight:300;line-height:1.2;letter-spacing:.03em;margin-bottom:18px;max-width:550px;animation:fUp .9s .4s both}
+.hTitle em{font-style:italic;color:var(--gd)}
+.hTitle strong{font-weight:300;display:block;font-size:.45em;letter-spacing:.18em;text-transform:uppercase;font-style:normal;color:var(--cr6);margin-bottom:6px;font-family:var(--fu)}
+
+.hSub{font-size:12px;color:var(--cr6);line-height:1.82;max-width:380px;margin-bottom:28px;animation:fUp .9s .52s both}
+.hCtas{display:flex;gap:12px;flex-wrap:wrap;animation:fUp .9s .62s both}
+
+/* Custom premium styles for hero buttons */
+.btnP, .btnS{
+  display:inline-block;
+  font-family:var(--fu);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  text-decoration:none;
+  padding:12px 28px;
+  text-align:center;
+  transition:all 0.35s ease;
+}
+.btnP{
+  background:var(--cr);
+  color:var(--bg);
+  border:1px solid var(--cr);
+}
+.btnP:hover{
+  background:var(--gd);
+  border-color:var(--gd);
+  color:var(--bg);
+}
+.btnS{
+  background:transparent;
+  color:var(--cr);
+  border:1px solid rgba(237,232,220,.25);
+}
+.btnS:hover{
+  border-color:var(--gd);
+  color:var(--gd);
+}
+
+/* Tags — absolute bottom-right corner */
+.hTagsCorner{position:absolute;bottom:58px;right:52px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;z-index:2;animation:fUp .9s .72s both}
+.hTag{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(237,232,220,.38);border:1px solid rgba(237,232,220,.1);padding:5px 11px}
+
+/* Scroll */
+.hScroll{position:absolute;right:52px;bottom:58px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fUp .9s .7s both}
+.hScrollLine{width:1px;height:44px;background:linear-gradient(to bottom,var(--gd),transparent);animation:sP 2.2s ease-in-out infinite}
+.hScrollTxt{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cr2);writing-mode:vertical-lr}
+@keyframes sP{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+@keyframes fUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+/* SHARED */
+.sec{padding:112px 52px;position:relative}
+.sHead{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:68px;border-top:1px solid var(--bdr);padding-top:26px}
+.sNum{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--gd);margin-top:2px}
+.sTitle{font-family:var(--fd);font-size:clamp(32px,4.5vw,68px);font-weight:300;line-height:1;letter-spacing:-.01em}
+.sTitle em{font-style:italic;color:var(--gd)}
+.sDesc{font-size:12px;color:var(--cr6);max-width:230px;line-height:1.75;text-align:right}
+
+/* FEATURED WORK */
+#work{padding:112px 0}
+#work .sHead{padding:26px 52px 0;margin-bottom:52px}
+.wGrid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.wCard{position:relative;overflow:hidden;background:var(--bg3);cursor:none}
+.wCard:first-child{grid-column:1/-1;height:66vh}
+.wCard:not(:first-child){height:44vh}
+.wImg{width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.25,.46,.45,.94),filter .9s;filter:brightness(.62) saturate(.72)}
+.wCard:hover .wImg{transform:scale(1.06);filter:brightness(.82) saturate(1)}
+.wOv{position:absolute;inset:0;background:linear-gradient(to top,rgba(7,7,7,.9) 0%,rgba(7,7,7,.12) 55%,transparent 100%);transition:background .5s}
+.wCard:hover .wOv{background:linear-gradient(to top,rgba(7,7,7,.96) 0%,rgba(7,7,7,.32) 58%,rgba(7,7,7,.06) 100%)}
+.wContent{position:absolute;bottom:0;left:0;right:0;padding:32px 44px;display:flex;align-items:flex-end;justify-content:space-between}
+.wStyle{font-size:10px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gd);margin-bottom:7px}
+.wName{font-family:var(--fd);font-size:clamp(24px,3vw,46px);font-weight:300;line-height:1}
+.wSub{font-size:11.5px;color:var(--cr6);margin-top:6px}
+.wBtn{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cr);border:1px solid rgba(237,232,220,.25);padding:10px 20px;text-decoration:none;opacity:0;transform:translateY(10px);transition:opacity .3s,transform .3s,border-color .3s,color .3s;white-space:nowrap}
+.wCard:hover .wBtn{opacity:1;transform:translateY(0)}
+.wBtn:hover{border-color:var(--gd);color:var(--gd)}
+.wPh{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;height:44vh;background:var(--bg2);border:1px solid var(--bdr)}
+.wPhLbl{font-family:var(--fd);font-size:19px;font-weight:300;font-style:italic;color:var(--cr6)}
+.wPhSub{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--cr2)}
+
+/* WHY */
+#why{background:var(--bg2)}
+.wyGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.wyCard{padding:40px 34px;background:var(--bg3);border:1px solid var(--bdr);transition:border-color .35s,background .35s}
+.wyCard:hover{border-color:var(--gd4);background:#101010}
+.wyN{font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--gd);margin-bottom:16px}
+.wyT{font-family:var(--fd);font-size:21px;font-weight:400;line-height:1.15;margin-bottom:13px}
+.wyD{font-size:12px;color:var(--cr6);line-height:1.75}
+
+/* PROCESS */
+.prGrid{display:grid;grid-template-columns:1fr 2fr;gap:92px;align-items:start}
+.prLeft{position:sticky;top:112px}
+.prLbl{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);margin-bottom:20px}
+.prLT{font-family:var(--fd);font-size:44px;font-weight:300;line-height:1;margin-bottom:20px}
+.prLT em{font-style:italic;color:var(--gd)}
+.prLD{font-size:12px;color:var(--cr6);line-height:1.75}
+.prSteps{display:flex;flex-direction:column}
+.prStep{display:grid;grid-template-columns:68px 1fr;gap:26px;padding:34px 0;border-bottom:1px solid var(--bdr);transition:border-color .3s}
+.prStep:first-child{border-top:1px solid var(--bdr)}
+.prStep:hover{border-color:var(--bdrS)}
+.prN{font-family:var(--fd);font-size:36px;font-weight:300;color:var(--cr1);line-height:1;transition:color .35s}
+.prStep:hover .prN{color:var(--gd4)}
+.prST{font-family:var(--fd);font-size:20px;font-weight:400;margin-bottom:8px}
+.prSD{font-size:12px;color:var(--cr6);line-height:1.75}
+
+/* THEMES */
+.thIntro{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-bottom:64px;align-items:end}
+.thIT{font-family:var(--fd);font-size:clamp(36px,4.8vw,68px);font-weight:300;line-height:1}
+.thIT em{font-style:italic;color:var(--gd)}
+.thDesc{font-size:12px;color:var(--cr6);line-height:1.75;max-width:280px;margin-left:auto}
+.thGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.thCard{position:relative;height:440px;overflow:hidden;cursor:none}
+.thBg{position:absolute;inset:0;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.thCard:hover .thBg{transform:scale(1.06)}
+.th1 .thBg{background:linear-gradient(145deg,#F0EBE2 0%,#E0D5C5 100%)}
+.th2 .thBg{background:linear-gradient(145deg,#160A08 0%,#291210 50%,#3A1A14 100%)}
+.th3 .thBg{background:linear-gradient(145deg,#04040A 0%,#0C0C1C 100%)}
+.th4 .thBg{background:linear-gradient(145deg,#180800 0%,#2E1000 50%,#3E1A00 100%)}
+.th5 .thBg{background:linear-gradient(145deg,#080808 0%,#181818 100%)}
+.th6 .thBg{background:linear-gradient(145deg,#060E1E 0%,#0E1E38 50%,#182E50 100%)}
+.thLines{position:absolute;inset:26px;border:1px solid;opacity:.12;transition:opacity .45s,inset .45s}
+.th1 .thLines{border-color:#5A3E28}
+.th2 .thLines,.th3 .thLines,.th4 .thLines,.th5 .thLines,.th6 .thLines{border-color:rgba(237,232,220,.38)}
+.thCard:hover .thLines{opacity:.3;inset:16px}
+.thMono{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.thMono span{font-family:var(--fd);font-size:48px;font-weight:300;font-style:italic;letter-spacing:-.01em;transition:transform .4s}
+.th1 .thMono span{color:#3D2B1F}.th2 .thMono span{color:#C4A882}.th3 .thMono span{color:#7A8899}
+.th4 .thMono span{color:#D4A055}.th5 .thMono span{color:#B8B0A0}.th6 .thMono span{color:#6EB4C8}
+.thCard:hover .thMono span{transform:scale(.93)}
+.thOv{position:absolute;inset:0;background:rgba(7,7,7,.88);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;opacity:0;transition:opacity .4s}
+.thCard:hover .thOv{opacity:1}
+.thOvT{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--cr)}
+.thOvB{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bg);background:var(--cr);border:none;padding:10px 22px;cursor:pointer;font-family:var(--fu)}
+.thLabel{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(to top,rgba(7,7,7,.85),transparent)}
+.thLS{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gd);margin-bottom:3px}
+.thLN{font-family:var(--fd);font-size:18px;font-weight:300;font-style:italic}
+
+/* TESTIMONIALS */
+#testi{background:var(--bg2)}
+.teGrid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.teCard{padding:42px;background:var(--bg3);border:1px solid var(--bdr);transition:border-color .35s}
+.teCard:hover{border-color:var(--gd4)}
+.teQ{font-family:var(--fd);font-size:20px;font-weight:300;font-style:italic;line-height:1.55;color:var(--cr);margin-bottom:26px}
+.teMeta{display:flex;align-items:center;gap:12px}
+.teLine{width:20px;height:1px;background:var(--gd)}
+.teN{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cr6)}
+.tePh{padding:42px;background:var(--bg3);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center}
+.tePh p{font-family:var(--fd);font-size:18px;font-weight:300;font-style:italic;color:var(--cr6);text-align:center;line-height:1.7}
+
+/* PRICING */
+.prGrid2{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.prCard{padding:42px 34px;background:var(--bg2);border:1px solid var(--bdr);display:flex;flex-direction:column;transition:border-color .35s,background .35s}
+.prCard:hover{border-color:var(--gd4);background:var(--bg3)}
+.prCard.feat{background:var(--bg3);border-color:var(--gd4)}
+.prTier{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gd);margin-bottom:13px}
+.prName{font-family:var(--fd);font-size:28px;font-weight:300;margin-bottom:6px}
+.prAmt{font-family:var(--fd);font-size:42px;font-weight:300;color:var(--cr);margin-bottom:6px;line-height:1}
+.prAmtSub{font-size:11px;color:var(--cr6);margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--bdr)}
+.prTag{font-size:12px;color:var(--cr6);line-height:1.65}
+.prFeats{list-style:none;flex:1;margin:20px 0 34px}
+.prFeats li{font-size:12px;color:var(--cr6);padding:8px 0;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px}
+.prFeats li::before{content:"";width:3px;height:3px;background:var(--gd);border-radius:50%;flex-shrink:0}
+.prCta{font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--cr);border:1px solid var(--bdrS);padding:12px;text-decoration:none;display:block;text-align:center;transition:background .3s,border-color .3s,color .3s}
+.prCta:hover,.prCard.feat .prCta{background:var(--cr);border-color:var(--cr);color:var(--bg)}
+.prCard.feat .prCta:hover{background:var(--gd);border-color:var(--gd)}
+
+/* RSVP HIGHLIGHT */
+.rsvpBox{background:var(--bg3);border:1px solid var(--gd4);padding:48px 52px;margin-top:2px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.rsvpTitle{font-family:var(--fd);font-size:34px;font-weight:300;margin-bottom:14px}
+.rsvpTitle em{font-style:italic;color:var(--gd)}
+.rsvpDesc{font-size:12.5px;color:var(--cr6);line-height:1.8}
+.rsvpFeats{list-style:none;display:flex;flex-direction:column;gap:10px}
+.rsvpFeats li{font-size:12px;color:var(--cr6);display:flex;align-items:flex-start;gap:10px}
+.rsvpFeats li::before{content:"";width:4px;height:4px;background:var(--gd);border-radius:50%;flex-shrink:0;margin-top:6px}
+
+/* FAQ */
+#faq{background:var(--bg2)}
+.fqGrid{display:grid;grid-template-columns:1fr 2fr;gap:92px}
+.fqLeft{position:sticky;top:112px;align-self:start}
+.fqList{display:flex;flex-direction:column}
+.fqItem{border-bottom:1px solid var(--bdr)}
+.fqItem:first-child{border-top:1px solid var(--bdr)}
+.fqQ{font-family:var(--fd);font-size:18px;font-weight:400;padding:24px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:18px;transition:color .3s;user-select:none}
+.fqQ:hover{color:var(--gd)}
+.fqIco{flex-shrink:0;width:16px;height:16px;position:relative}
+.fqIco::before,.fqIco::after{content:"";position:absolute;background:var(--cr6);transition:transform .3s,opacity .3s}
+.fqIco::before{width:10px;height:1px;top:50%;left:3px;transform:translateY(-50%)}
+.fqIco::after{width:1px;height:10px;left:50%;top:3px;transform:translateX(-50%)}
+.fqItem.open .fqIco::after{transform:translateX(-50%) rotate(90deg);opacity:0}
+.fqA{font-size:12px;color:var(--cr6);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .45s ease,padding .45s}
+.fqItem.open .fqA{max-height:200px;padding-bottom:24px}
+
+/* CTA */
+#cta{min-height:66vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(196,168,130,.055) 0%,transparent 68%)}
+.ctaInner{position:relative;z-index:1;max-width:740px;padding:0 52px;text-align:center}
+.ctaEye{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gd);margin-bottom:26px}
+.ctaT{font-family:var(--fd);font-size:clamp(44px,6.2vw,92px);font-weight:300;line-height:1;letter-spacing:-.02em;margin-bottom:26px}
+.ctaT em{font-style:italic;color:var(--gd)}
+.ctaSub{font-size:12.5px;color:var(--cr6);line-height:1.75;margin-bottom:40px}
+.ctaBtns{display:flex;gap:12px;justify-content:center}
+
+/* FOOTER */
+footer{padding:40px 52px;border-top:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:22px}
+.fLogo{font-family:var(--fd);font-size:15px;font-weight:600;letter-spacing:.1em;color:var(--cr)}
+.fLinks{display:flex;gap:26px;list-style:none}
+.fLinks a{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cr6);text-decoration:none;transition:color .3s}
+.fLinks a:hover{color:var(--cr)}
+.fCopy{font-size:11px;color:rgba(237,232,220,.18);letter-spacing:.04em}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .85s cubic-bezier(.25,.46,.45,.94),transform .85s cubic-bezier(.25,.46,.45,.94)}
+.rv.v{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.38s}
+
+/* ----------------------------------------------------------------
+   MOBILE & RESPONSIVE POLISH (PREVENTS OVERFLOW & MAKES IT FLUID)
+   ---------------------------------------------------------------- */
+@media (max-width: 1024px), (pointer: coarse) {
+  #cur, #curR {
+    display: none !important;
+  }
+  body {
+    cursor: auto !important;
+  }
+  .wCard, .thCard, .fqQ {
+    cursor: auto !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sec {
+    padding: 80px 32px;
+  }
+  .wyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .thGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .prGrid2 {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  nav {
+    padding: 16px 24px !important;
+  }
+  .navToggle {
+    display: block;
+    margin-left: auto;
+    margin-right: 16px;
+  }
+  .nLinks {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 320px;
+    height: 100vh;
+    background: rgba(13, 13, 13, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid var(--bdr);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    z-index: 105;
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    padding: 40px;
+  }
+  .nLinks.active {
+    right: 0;
+  }
+  .nCta {
+    padding: 8px 16px;
+    font-size: 10px;
+  }
+  .prGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .prLeft {
+    position: relative;
+    top: 0;
+  }
+  .fqGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .fqLeft {
+    position: relative;
+    top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .sec {
+    padding: 80px 24px;
+  }
+  .sHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .sDesc {
+    text-align: left;
+    max-width: 100%;
+  }
+  .hStrip {
+    padding: 80px 24px 0;
+  }
+  .hContent {
+    padding: 0 24px 40px;
+  }
+  .hScroll {
+    display: none;
+  }
+  .hTagsCorner {
+    bottom: 40px;
+    right: 24px;
+    display: none; /* Hide scroll & tags corner to clear mobile workspace and focus on title */
+  }
+  .hSub {
+    max-width: 100%;
+  }
+  .wGrid {
+    grid-template-columns: 1fr;
+  }
+  .wCard:first-child, .wCard:not(:first-child) {
+    height: 50vh;
+  }
+  .wContent {
+    padding: 24px;
+  }
+  .wName {
+    font-size: 28px;
+  }
+  .thIntro {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .thDesc {
+    margin-left: 0;
+    max-width: 100%;
+  }
+  .teGrid {
+    grid-template-columns: 1fr;
+  }
+  .teCard, .tePh {
+    padding: 32px 24px;
+  }
+  .rsvpBox {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 32px 24px;
+  }
+  footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+    padding: 40px 24px;
+  }
+  .fLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wyGrid {
+    grid-template-columns: 1fr;
+  }
+  .thGrid {
+    grid-template-columns: 1fr;
+  }
+  .thCard {
+    height: 380px;
+  }
+  .ctaInner {
+    padding: 0 24px;
+  }
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="curR"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nLogo">Novexis Studio</a>
+  <button class="navToggle" aria-label="Toggle Navigation">
+    <span></span>
+    <span></span>
+  </button>
+  <ul class="nLinks">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#why">Why Digital</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#themes">Styles</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://wa.me/94785803917" class="nCta" target="_blank">Get in Touch</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hBg"></div>
+
+  <!-- Top strip: studio name left, year right -->
+  <div class="hStrip">
+    <span class="hStripTxt">Novexis Studio &mdash; Sri Lanka</span>
+    <span class="hStripTxt">Est. 2026</span>
+  </div>
+
+  <!-- Bottom-left editorial text block -->
+  <div class="hContent">
+    <div class="hCat">
+      <div class="hCatLine"></div>
+      <span class="hCatTxt">Digital Wedding Invitations</span>
+    </div>
+    <h1 class="hTitle">
+      <strong>Crafting Luxury</strong>
+      <em>Wedding</em> Experiences
+    </h1>
+    <p class="hSub">Cinematic invitations designed to make your special day feel utterly unforgettable &mdash; from just LKR 5,000.</p>
+    <div class="hCtas">
+      <a href="#work" class="btnP">View Our Work</a>
+      <a href="https://wa.me/94785803917" class="btnS" target="_blank">WhatsApp</a>
+    </div>
+  </div>
+
+  <!-- Tags — bottom-right corner -->
+  <div class="hTagsCorner">
+    <span class="hTag">Modern</span>
+    <span class="hTag">Elegant</span>
+    <span class="hTag">Interactive</span>
+  </div>
+
+  <div class="hScroll">
+    <div class="hScrollLine"></div>
+    <span class="hScrollTxt">Scroll</span>
+  </div>
+</section>
+
+<!-- FEATURED WORK -->
+<section id="work">
+  <div class="sHead rv">
+    <span class="sNum">01</span>
+    <h2 class="sTitle">Featured<br><em>Work</em></h2>
+    <p class="sDesc">Each invitation is a unique cinematic experience, crafted with care for every couple.</p>
+  </div>
+  <div class="wGrid">
+    <div class="wCard rv">
+      <!-- Added a high-quality wedding fallback image to guarantee visual elegance in any hosting downtime -->
+      <img class="wImg" src="https://chalani-chamika-wedding-invitation.vercel.app/IMG-20260218-WA0068.jpg" onerror="this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop'" alt="Chamika & Chalani" loading="lazy">
+      <div class="wOv"></div>
+      <div class="wContent">
+        <div>
+          <div class="wStyle">Parisian Editorial</div>
+          <div class="wName">Chamika &amp; Chalani</div>
+          <div class="wSub">The Majestic Grandeeza &middot; Negombo &middot; May 2026</div>
+        </div>
+        <a href="https://chalani-chamika-wedding-invitation.vercel.app/" class="wBtn" target="_blank">Open Experience &rarr;</a>
+      </div>
+    </div>
+    <div class="wCard rv d1">
+      <img class="wImg" src="./THISARI WEBSITE/Gemini_Generated_Image_ii0lo3ii0lo3ii0l.png" onerror="this.src='./THISARI WEBSITE/kingsbury_venue.png'" alt="Thisari & Roshan" loading="lazy">
+      <div class="wOv"></div>
+      <div class="wContent">
+        <div>
+          <div class="wStyle">Floral Elegant</div>
+          <div class="wName">Thisari &amp; Roshan</div>
+          <div class="wSub">The Balmoral Ballroom &middot; The Kingsbury &middot; Dec 2026</div>
+        </div>
+        <a href="./THISARI WEBSITE/INDEX.html" class="wBtn" target="_blank">Open Experience &rarr;</a>
+      </div>
+    </div>
+    <div class="wCard rv d2">
+      <img class="wImg" src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop" alt="Nayani & Supun" loading="lazy">
+      <div class="wOv"></div>
+      <div class="wContent">
+        <div>
+          <div class="wStyle">Contemporary Editorial</div>
+          <div class="wName">Nayani &amp; Supun</div>
+          <div class="wSub">Cinnamon Grand &middot; Colombo &middot; Nov 2026</div>
+        </div>
+        <a href="https://novexisstudio.vercel.app" class="wBtn" target="_blank">Open Experience &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY DIGITAL -->
+<section id="why" class="sec">
+  <div class="sHead rv">
+    <span class="sNum">02</span>
+    <h2 class="sTitle">Why<br><em>Digital?</em></h2>
+    <p class="sDesc">How digital invitations transform the wedding experience for couples and every guest.</p>
+  </div>
+  <div class="wyGrid">
+    <div class="wyCard rv">
+      <div class="wyN">01</div>
+      <div class="wyT">Instant &amp;<br>Elegant</div>
+      <p class="wyD">Ready in as little as 2 days. Your luxury invitation delivered without delays, printing queues, or distribution headaches.</p>
+    </div>
+    <div class="wyCard rv d1">
+      <div class="wyN">02</div>
+      <div class="wyT">Share Everything,<br>Instantly</div>
+      <p class="wyD">Live maps, event schedules, photo galleries, RSVP &mdash; all in one elegant link shared via WhatsApp in a single tap.</p>
+    </div>
+    <div class="wyCard rv d2">
+      <div class="wyN">03</div>
+      <div class="wyT">Luxury<br>Presentation</div>
+      <p class="wyD">A premium, modern experience that reflects the elegance of your celebration and leaves a lasting first impression.</p>
+    </div>
+    <div class="wyCard rv d3">
+      <div class="wyN">04</div>
+      <div class="wyT">Smart Guest<br>Management</div>
+      <p class="wyD">Real-time RSVP tracking, guest pax counts, and automatic Google Sheet sync make seating and catering effortless.</p>
+    </div>
+    <div class="wyCard rv d4">
+      <div class="wyN">05</div>
+      <div class="wyT">Works on<br>Every Device</div>
+      <p class="wyD">Mobile-first design, tested across all devices. Every guest sees the full cinematic experience from any phone or browser.</p>
+    </div>
+    <div class="wyCard rv">
+      <div class="wyN">06</div>
+      <div class="wyT">Fully<br>Personalised</div>
+      <p class="wyD">Your story, your photos, your music, your colours. Every invitation is crafted exclusively around your vision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="sec">
+  <div class="prGrid">
+    <div class="prLeft rv">
+      <div class="prLbl">The Process</div>
+      <h2 class="prLT">From Vision<br><em>to Reality</em></h2>
+      <p class="prLD">A seamless journey from our first conversation to the moment your guests open a stunning invitation link.</p>
+    </div>
+    <div class="prSteps">
+      <div class="prStep rv"><div class="prN">01</div><div><div class="prST">Discussion &amp; Vision</div><p class="prSD">We begin with a conversation &mdash; your style, your story, your preferences. This is where the dream takes shape.</p></div></div>
+      <div class="prStep rv d1"><div class="prN">02</div><div><div class="prST">Design Concept</div><p class="prSD">A bespoke direction is crafted &mdash; colour palette, typography, layout, and the overall emotional aesthetic.</p></div></div>
+      <div class="prStep rv d2"><div class="prN">03</div><div><div class="prST">Interactive Development</div><p class="prSD">Your invitation comes to life &mdash; animations, music, maps, galleries, countdown timers, and RSVP functionality.</p></div></div>
+      <div class="prStep rv d3"><div class="prN">04</div><div><div class="prST">Review &amp; Revisions</div><p class="prSD">You review every detail. We refine until it is perfect &mdash; no rush, no compromise, no shortcuts.</p></div></div>
+      <div class="prStep rv"><div class="prN">05</div><div><div class="prST">Final Launch</div><p class="prSD">Your invitation goes live on a clean, shareable link. Ready to send to every guest with complete confidence.</p></div></div>
+      <div class="prStep rv d1"><div class="prN">06</div><div><div class="prST">Wedding Day Support</div><p class="prSD">We remain available through your wedding day. Any last-minute updates &mdash; we handle them immediately.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO THEMES -->
+<section id="themes" class="sec">
+  <div class="thIntro">
+    <div class="rv">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--gd);display:block;margin-bottom:20px">03</span>
+      <h2 class="thIT">Invitation<br><em>Styles</em></h2>
+    </div>
+    <p class="thDesc rv d1">Every couple is different. Choose from our signature styles &mdash; or we create something entirely bespoke, just for you.</p>
+  </div>
+  <div class="thGrid">
+    <div class="thCard th1 rv"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>N &amp; S</span></div><div class="thOv"><div class="thOvT">Minimal Luxury</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 01</div><div class="thLN">Minimal Luxury</div></div></div>
+    <div class="thCard th2 rv d1"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>A &amp; R</span></div><div class="thOv"><div class="thOvT">Floral Elegant</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 02</div><div class="thLN">Floral Elegant</div></div></div>
+    <div class="thCard th3 rv d2"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>M &amp; J</span></div><div class="thOv"><div class="thOvT">Dark Cinematic</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 03</div><div class="thLN">Dark Cinematic</div></div></div>
+    <div class="thCard th4 rv"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>K &amp; P</span></div><div class="thOv"><div class="thOvT">Traditional Sri Lankan</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 04</div><div class="thLN">Traditional Sri Lankan</div></div></div>
+    <div class="thCard th5 rv d1"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>L &amp; D</span></div><div class="thOv"><div class="thOvT">Modern Editorial</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 05</div><div class="thLN">Modern Editorial</div></div></div>
+    <div class="thCard th6 rv d2"><div class="thBg"></div><div class="thLines"></div><div class="thMono"><span>T &amp; V</span></div><div class="thOv"><div class="thOvT">Beach Wedding</div><button class="thOvB">Preview Style</button></div><div class="thLabel"><div class="thLS">Style 06</div><div class="thLN">Beach Wedding</div></div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi" class="sec">
+  <div class="sHead rv">
+    <span class="sNum">04</span>
+    <h2 class="sTitle">Client<br><em>Stories</em></h2>
+    <p class="sDesc">The words of the couples we have had the privilege of serving.</p>
+  </div>
+  <div class="teGrid">
+    <div class="teCard rv">
+      <p class="teQ">&ldquo;We never imagined our wedding invitation could feel like this. Every guest who opened the link was completely amazed. It was the most beautiful thing we could have given them.&rdquo;</p>
+      <div class="teMeta"><div class="teLine"></div><span class="teN">Chamika &amp; Chalani &mdash; May 2026</span></div>
+    </div>
+    <div class="tePh rv d1"><p>More love stories<br>being added soon.<br><em style="color:var(--gd)">Yours could be next.</em></p></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="sec">
+  <div class="sHead rv">
+    <span class="sNum">05</span>
+    <h2 class="sTitle">Investment<br><em>Packages</em></h2>
+    <p class="sDesc">Transparent pricing for every vision &mdash; from intimate elegance to full cinematic luxury.</p>
+  </div>
+  <div class="prGrid2">
+    <div class="prCard rv">
+      <div class="prTier">Package 01 &mdash; Basic</div>
+      <div class="prName">Essential</div>
+      <div class="prAmt">LKR 5,000</div>
+      <div class="prAmtSub">An elegant digital invitation that tells your story beautifully.</div>
+      <ul class="prFeats">
+        <li>Cinematic web invitation (mobile-optimised)</li>
+        <li>3-photo gallery</li>
+        <li>Live countdown timer</li>
+        <li>Google Maps integration</li>
+        <li>One-tap WhatsApp sharing</li>
+        <li>1-month hosting included</li>
+      </ul>
+      <a href="https://wa.me/94785803917" class="prCta" target="_blank">Inquire via WhatsApp</a>
+    </div>
+    <div class="prCard feat rv d1">
+      <div class="prTier">Package 02 &mdash; Most Popular</div>
+      <div class="prName">Premium</div>
+      <div class="prAmt">LKR 8,000</div>
+      <div class="prAmtSub">The complete cinematic experience with Smart RSVP.</div>
+      <ul class="prFeats">
+        <li>Everything in Essential</li>
+        <li>Advanced luxury design</li>
+        <li>Unlimited photo gallery</li>
+        <li>Video integration (pre-wedding / save-the-date)</li>
+        <li>Custom background music</li>
+        <li>Instant RSVP phone notifications</li>
+        <li>Real-time Google Sheet guest list sync</li>
+        <li>RSVP deadline management</li>
+        <li>6-month hosting included</li>
+      </ul>
+      <a href="https://wa.me/94785803917" class="prCta" target="_blank">Inquire via WhatsApp</a>
+    </div>
+    <div class="prCard rv d2">
+      <div class="prTier">Package 03 &mdash; Bespoke</div>
+      <div class="prName">Luxury</div>
+      <div class="prAmt" style="font-size:28px;margin-bottom:12px">Custom Quote</div>
+      <div class="prAmtSub">A fully bespoke cinematic wedding experience &mdash; tailored entirely to your vision.</div>
+      <ul class="prFeats">
+        <li>Everything in Premium</li>
+        <li>Bespoke design direction from scratch</li>
+        <li>Cinematic parallax scroll effects</li>
+        <li>Custom domain setup</li>
+        <li>Envelope reveal animation</li>
+        <li>Unlimited revisions</li>
+        <li>Wedding day live support</li>
+        <li>Post-wedding gallery update</li>
+        <li>1-year hosting included</li>
+      </ul>
+      <a href="https://wa.me/94785803917" class="prCta" target="_blank">Discuss Your Vision</a>
+    </div>
+  </div>
+  <!-- SMART RSVP HIGHLIGHT -->
+  <div class="rsvpBox rv">
+    <div>
+      <h3 class="rsvpTitle">Smart <em>RSVP</em><br>System</h3>
+      <p class="rsvpDesc">No more manual guest lists. Our Smart RSVP system is included in the Premium package &mdash; and it changes everything about how you manage your wedding day.</p>
+    </div>
+    <ul class="rsvpFeats">
+      <li>When guests click &ldquo;Confirm&rdquo;, you receive an instant notification on your mobile phone</li>
+      <li>All guest details automatically sync to a private Google Sheet in real-time</li>
+      <li>Guests can specify their pax (attendee count) for precise catering &amp; seating</li>
+      <li>Set and manage RSVP deadlines with automatic reminders</li>
+      <li>Full guest list always at your fingertips &mdash; from any device, anywhere</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="sec">
+  <div class="fqGrid">
+    <div class="fqLeft rv">
+      <span style="font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--gd);display:block;margin-bottom:13px">06</span>
+      <h2 class="sTitle" style="font-size:clamp(28px,3.5vw,50px);margin-bottom:20px">Common<br><em>Questions</em></h2>
+      <p style="font-size:12px;color:var(--cr6);line-height:1.75;margin-bottom:26px">Still curious? We are happy to walk you through everything personally, at any time.</p>
+      <a href="https://wa.me/94785803917" class="btnP" target="_blank" style="display:inline-block">Ask Us Anything</a>
+    </div>
+    <div class="fqList rv d1">
+      <div class="fqItem"><div class="fqQ">How long does it take to create an invitation? <div class="fqIco"></div></div><div class="fqA">Typically 2&ndash;5 working days from our initial discussion to the final launch. Rush delivery is available upon request.</div></div>
+      <div class="fqItem"><div class="fqQ">Can guests RSVP through the invitation? <div class="fqIco"></div></div><div class="fqA">Yes &mdash; the Premium package includes a fully functional Smart RSVP system with instant phone notifications and automatic Google Sheet sync.</div></div>
+      <div class="fqItem"><div class="fqQ">Can we edit details after it is launched? <div class="fqIco"></div></div><div class="fqA">Absolutely. Minor updates such as times, venue details, or messages can be made at any point before your wedding day.</div></div>
+      <div class="fqItem"><div class="fqQ">Does the countdown timer work correctly? <div class="fqIco"></div></div><div class="fqA">Yes &mdash; the countdown is locked to your exact wedding date and time. It will always display the correct time remaining, regardless of when hosting starts.</div></div>
+      <div class="fqItem"><div class="fqQ">Can guests specify how many people are attending? <div class="fqIco"></div></div><div class="fqA">Yes. Our RSVP forms allow guests to enter their exact pax (guest count), making it incredibly easy to finalise catering and seating arrangements.</div></div>
+      <div class="fqItem"><div class="fqQ">Does it work properly on all phones? <div class="fqIco"></div></div><div class="fqA">Yes &mdash; every invitation is built mobile-first and thoroughly tested across all devices and browsers for a flawless experience.</div></div>
+      <div class="fqItem"><div class="fqQ">Can we use our own photos and music? <div class="fqIco"></div></div><div class="fqA">Of course. Your photos and your chosen background music are central to making the invitation authentically yours.</div></div>
+      <div class="fqItem"><div class="fqQ">How do guests access the invitation? <div class="fqIco"></div></div><div class="fqA">A single clean, shareable link is all they need. Send it via WhatsApp, email, or any platform. No app download required.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta">
+  <div class="ctaInner">
+    <div class="ctaEye rv">&mdash; Let&rsquo;s Begin &mdash;</div>
+    <h2 class="ctaT rv d1">Let&rsquo;s Create Something<br><em>Beautiful</em></h2>
+    <p class="ctaSub rv d2">Your love story deserves more than a printed card.<br>It deserves an experience your guests will never forget.</p>
+    <div class="ctaBtns rv d3">
+      <a href="#work" class="btnP">View Our Work</a>
+      <a href="https://wa.me/94785803917" class="btnS" target="_blank">Chat on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fLogo">Novexis Studio</div>
+  <ul class="fLinks">
+    <li><a href="#" target="_blank">Instagram</a></li>
+    <li><a href="#" target="_blank">Facebook</a></li>
+    <li><a href="https://wa.me/94785803917" target="_blank">WhatsApp</a></li>
+    <li><a href="mailto:novexisstudio@gmail.com">Email</a></li>
+  </ul>
+  <div class="fCopy">&copy; 2026 Novexis Studio. All rights reserved.</div>
+</footer>
+
+<script>
+(function(){
+  var cur=document.getElementById("cur"),ring=document.getElementById("curR");
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener("mousemove",function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+"px";cur.style.top=my+"px"});
+  (function a(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=Math.round(rx)+"px";ring.style.top=Math.round(ry)+"px";requestAnimationFrame(a)})();
+  document.querySelectorAll("a,button,.wCard,.thCard,.fqQ,.prCard").forEach(function(el){
+    el.addEventListener("mouseenter",function(){ring.style.transform="translate(-50%,-50%) scale(2.2)";ring.style.borderColor="rgba(196,168,130,.7)"});
+    el.addEventListener("mouseleave",function(){ring.style.transform="translate(-50%,-50%) scale(1)";ring.style.borderColor="rgba(196,168,130,.4)"});
+  });
+  var nav=document.getElementById("nav");
+  window.addEventListener("scroll",function(){nav.classList.toggle("s",window.scrollY>70)},{passive:true});
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add("v");obs.unobserve(e.target)}})},{threshold:.08,rootMargin:"0px 0px -50px 0px"});
+  document.querySelectorAll(".rv").forEach(function(el){obs.observe(el)});
+  document.querySelectorAll(".fqQ").forEach(function(q){q.addEventListener("click",function(){var item=q.parentElement,isOpen=item.classList.contains("open");document.querySelectorAll(".fqItem").forEach(function(i){i.classList.remove("open")});if(!isOpen)item.classList.add("open")})});
+
+  // Mobile navigation drawer toggle logic
+  var toggle = document.querySelector('.navToggle');
+  var menu = document.querySelector('.nLinks');
+  if (toggle && menu) {
+    toggle.addEventListener('click', function() {
+      toggle.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+    document.querySelectorAll('.nLinks a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Envelope Animation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            overflow: hidden;
+        }
+
+        /* --- ENVELOPE WRAPPER & CONTAINER --- */
+        .envelope-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px; /* Essential for smooth 3D depth */
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .envelope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+        }
+
+        /* --- ENVELOPE IMAGES (BASE & LID) --- */
+        .envelope-base,
+        .envelope-lid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+
+        /* Base image sits at the back layer */
+        .envelope-base {
+            z-index: 1;
+            transform: translateZ(-2px); 
+        }
+
+        /* --- THE ROTATING LID LAYER --- */
+        .lid-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            transform-origin: 50% 0%; /* Keeps the rotation hinge exactly at the top edge */
+            transform-style: preserve-3d;
+            transform: translateZ(2px);
+            
+            /* Slower, ultra-smooth cubic-bezier transition for an elegant look */
+            transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-lid {
+            width: 100%;
+            pointer-events: none;
+        }
+
+        /* --- ANIMATION TRIGGER STATE --- */
+        
+        /* Rotates slightly outward on the X-axis by exactly 15 degrees */
+        .envelope-wrapper.open .lid-container {
+            transform: translateZ(10px) rotateX(15deg); 
+        }
+
+        /* --- HINT TEXT LAYER (OPTIONAL) --- */
+        .hint-text {
+            position: absolute;
+            bottom: 60px;
+            color: #777;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-family: sans-serif;
+            z-index: 10;
+            transition: opacity 1s ease;
+        }
+
+        .envelope-wrapper.open .hint-text {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="envelope-wrapper" onclick="toggleEnvelope()">
+        <div class="envelope-container">
+            
+            <img src="envelope-base.jpg" alt="Envelope Base" class="envelope-base">
+            
+            <div class="lid-container">
+                <img src="envelope-lid.png" alt="Envelope Lid" class="envelope-lid">
+            </div>
+
+        </div>
+        
+        <div class="hint-text">Click to view</div>
+    </section>
+
+    <script>
+        function toggleEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            envelope.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
